@@ -20,15 +20,15 @@ public class ProductServiceImpl implements ProductService {
                         || x.getCompanyName().equalsIgnoreCase("toiboss")
                         || x.getCompanyName().equalsIgnoreCase("milka")).
                 filter(a -> a.getReleaseDate()
-                        .plusMonths(1).isAfter(LocalDate.now()))
+                        .isAfter(LocalDate.now().plusMonths(1)))
                 .forEach(productDao.getProducts()::add);
     }
 
     @Override
     public void sortByDate(List<Product> products) {
         List<Product> linkedList = new LinkedList<>(productDao.getProducts());
-        linkedList.removeIf(product -> product.getReleaseDate().isBefore(LocalDate.now()));
-        products.stream().filter(x -> x.getReleaseDate().minusMonths(1).plusDays(7).isAfter(LocalDate.now()))
+        linkedList.removeIf(product -> product.getReleaseDate().isBefore(LocalDate.now().plusMonths(1)));
+        products.stream().filter(x -> x.getReleaseDate().minusWeeks(1).isBefore(LocalDate.now().plusMonths(1)))
                 .forEach(productDao.getDiscountProducts()::add);
         System.out.println(productDao.getDiscountProducts());
 
